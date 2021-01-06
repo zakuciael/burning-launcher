@@ -22,7 +22,7 @@ export const login = (username: string, password: string): Promise<string> => {
         });
 
         page.once("requestfinished", async (req) => {
-            if (req.response()?.status() !== 200) return;
+            if (req.response()?.status() !== 301) return;
 
             const session = await page
                 .cookies()
