@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 
 const InvalidSessionError = new Error("Invalid session provided");
 
-export const generateToken = (session: string): Promise<undefined | string> => {
+export const generateToken = (session: string): Promise<string> => {
     return fetch(`https://burningsw.to/api/generate_token`, {
         method: "POST",
         headers: {
