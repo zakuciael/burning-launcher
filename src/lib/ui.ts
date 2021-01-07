@@ -59,6 +59,19 @@ const actionUI = () => {
     );
 };
 
+export const closeUI = (): Promise<void> => {
+    return prompts({
+        type: "toggle",
+        name: "close",
+        message: "Do you want to close the app?",
+        initial: true,
+        active: "yes",
+        inactive: "no",
+    }).then((ans) => {
+        if (!ans.close) return closeUI();
+    });
+};
+
 export const accountUI = async (
     service: string,
     accounts: Account[],

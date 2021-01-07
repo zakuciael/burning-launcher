@@ -5,7 +5,7 @@ import { OraProgressBar } from "./lib/oraProgressBar";
 import { generateToken } from "./lib/generateToken";
 import { Account } from "./types/Account";
 import { Launcher } from "./lib/launcher";
-import { accountUI } from "./lib/ui";
+import { accountUI, closeUI } from "./lib/ui";
 import { login } from "./lib/login";
 import isAdmin from "is-admin";
 import prompts from "prompts";
@@ -23,7 +23,8 @@ const fetchAccounts = (): Promise<Account[]> => {
 
 (async () => {
     if (!(await isAdmin())) {
-        console.error(new Error("You need to run this program as the administrator"));
+        console.error("You need to run this program as the administrator");
+        await closeUI();
         return;
     }
 
@@ -69,15 +70,17 @@ const fetchAccounts = (): Promise<Account[]> => {
     });
 
     status.start(`Logging in...`);
-    const session = await login(username, password).catch((err) => {
+    const session = await login(username, password).catch(async (err) => {
         status.fail(err.message);
+        await closeUI();
         process.exit(1);
     });
     status.succeed(`Logged in as ${username}`);
 
     status.start(`Obtaining token from the API...`);
-    const token = await generateToken(session).catch((err) => {
+    const token = await generateToken(session).catch(async (err) => {
         status.fail(err.message);
+        await closeUI();
         process.exit(1);
     });
     status.succeed(`Token obtained!`);
@@ -85,8 +88,9 @@ const fetchAccounts = (): Promise<Account[]> => {
     status.start("Starting launcher process...");
     const launcher = new Launcher(token, username);
 
-    launcher.on("error", (err) => {
+    launcher.on("error", async (err) => {
         status.fail(err.message);
+        await closeUI();
         process.exit(1);
     });
 
@@ -99,8 +103,9 @@ const fetchAccounts = (): Promise<Account[]> => {
         status.start(msg);
     });
 
-    launcher.on("game_started", () => {
+    launcher.on("game_started", async () => {
         status.succeed("Game started!");
+        await closeUI();
         process.exit(0);
     });
 
