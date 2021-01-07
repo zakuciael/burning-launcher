@@ -2,7 +2,8 @@ import { deletePassword, setPassword } from "keytar";
 import { Account } from "../types/Account";
 import prompts from "prompts";
 
-const promptCancel = () => {
+const promptCancel = async () => {
+    await closeUI();
     process.exit(0);
 };
 
