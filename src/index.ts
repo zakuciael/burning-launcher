@@ -105,7 +105,6 @@ const fetchAccounts = (): Promise<Account[]> => {
 
     launcher.on("game_started", async () => {
         status.succeed("Game started!");
-        await closeUI();
         process.exit(0);
     });
 

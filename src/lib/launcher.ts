@@ -19,21 +19,6 @@ export class Launcher extends EventEmitter {
     }
 
     public start(launcherPath: string): void {
-        this.proc = spawn(path.resolve(launcherPath), [
-            `burningsw://${this.token}/?username=${this.username}`,
-        ]);
-
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        this.proc.on("error", () => {});
-
-        this.proc.on("close", (code) => {
-            this.emit("launcher_closed", code);
-
-            if (this.ws.readyState > WebSocket.CONNECTING) this.ws.close();
-            if (code !== 0) this.emit("error", new Error(`Process exited with error code ${code}`));
-            else if (code === 0 && !this.started) this.start(launcherPath);
-        });
-
         this.ws = new WebSocket(`wss://launcher.burningsw.to/ws`);
 
         this.ws.on("open", () => {
@@ -81,5 +66,24 @@ export class Launcher extends EventEmitter {
                     break;
             }
         });
+
+        this.proc = spawn(path.resolve(launcherPath), [
+            `burningsw://${this.token}/?username=${this.username}`,
+        ]);
+
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        this.proc.on("error", () => {});
+
+        this.proc.on("close", (code) => {
+            this.emit("launcher_closed", code);
+
+            if (this.ws.readyState > WebSocket.CONNECTING) this.ws.close();
+            if (code !== 0) this.emit("error", new Error(`Process exited with error code ${code}`));
+            else if (code === 0 && !this.started) this.start(launcherPath);
+        });
+    }
+
+    public stop(): void {
+        if (this.proc && this.proc.connected) this.proc.kill();
     }
 }
