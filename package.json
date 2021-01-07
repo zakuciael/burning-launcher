@@ -1,6 +1,6 @@
 {
   "name": "burning-launcher",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Node.js application designed to omit Burning SoulWorker's Web Launcher and do its best to start the game.",
   "main": "src/index.ts",
   "author": "Krzysztof Saczuk <zakuciael@outlook.com>",
