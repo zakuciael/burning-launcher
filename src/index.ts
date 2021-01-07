@@ -83,7 +83,7 @@ const fetchAccounts = (): Promise<Account[]> => {
     status.succeed(`Token obtained!`);
 
     status.start("Starting launcher process...");
-    const launcher = new Launcher(token, "username");
+    const launcher = new Launcher(token, username);
 
     launcher.on("error", (err) => {
         status.fail(err.message);
