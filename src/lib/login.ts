@@ -1,8 +1,20 @@
-import { launch } from "puppeteer";
+import { executablePath, launch } from "puppeteer";
+import path from "path";
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const isPkg = typeof process.pkg !== "undefined";
 
 export const login = (username: string, password: string): Promise<string> => {
     return new Promise(async (resolve, reject) => {
-        const browser = await launch();
+        const browser = await launch({
+            executablePath: isPkg
+                ? executablePath().replace(
+                      /^.*?node_modules(\/|\\)puppeteer(\/|\\)\.local-chromium/,
+                      path.join(path.dirname(process.execPath), "puppeteer")
+                  )
+                : executablePath(),
+        });
 
         const page = await browser.newPage();
         await page.goto(`https://burningsw.to`);
