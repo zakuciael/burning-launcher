@@ -4,7 +4,7 @@ node_modules/
 .idea/*
 
 # Compiled code
-buiild/
+build/
 dist/
 out/
 *.js
