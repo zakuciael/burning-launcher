@@ -6,9 +6,16 @@
   "author": "Krzysztof Saczuk <zakuciael@outlook.com>",
   "license": "MIT",
   "private": true,
+  "pkg": {
+    "targets": {
+      "platform": "win",
+      "arch": "x64"
+    }
+  },
   "scripts": {
     "start": "ts-node src/index.ts",
     "build": "tsc -p tsconfig.json",
+    "exe": "pkg dist/index.js -o build/bsw_launcher.exe --targets node14-win-x64 && Xcopy /E /I /Y node_modules\\puppeteer\\.local-chromium build\\puppeteer && Xcopy /E /I /Y node_modules\\keytar\\build\\Release\\keytar.node build\\keytar.node",
     "lint": "eslint src/**/*.ts"
   },
   "devDependencies": {
